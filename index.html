@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Trigonometric Ratios - رياضيات 11 عام | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن استخدام النسب المثلثية لإيجاد الأضلاع في المثلثات القائمة - رياضيات صف 11 عام">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; direction: ltr; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #1d4ed8; }
+body.en-mode .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #1d4ed8; color: white; }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #1d4ed8, #1e40af); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+body.en-mode .shuffle-badge { margin-right: 0; margin-left: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.15em; padding: 2px 8px; background: #dbeafe; border-radius: 4px; margin: 2px; color: #1e40af; font-weight: 700; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+body.en-mode .save-indicator { left: auto; right: 20px; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #dbeafe; border: 2px solid #1d4ed8; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; max-width: 100%; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #dbeafe; color: #1e40af; }
+.module-2 { background: #ecfdf5; color: #065f46; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #fef3c7; color: #92400e; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-blue-100">
+<span class="text-gray-600 ml-2">⏰ <span data-ar="الوقت المتبقي:" data-en="Time Left:">الوقت المتبقي:</span></span>
+<span id="timer" class="text-2xl font-bold text-blue-700 font-mono">45:00</span>
+<span class="shuffle-badge">📐 <span data-ar="النسب المثلثية" data-en="Trig Ratios">النسب المثلثية</span> - 30 <span data-ar="سؤال" data-en="Questions">سؤال</span></span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 <span data-ar="إظهار/إخفاء الإجابات" data-en="Show/Hide Answers">إظهار/إخفاء الإجابات</span></button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ <span data-ar="طباعة" data-en="Print">طباعة</span></button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-blue-700 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 <span data-ar="أسئلة جديدة" data-en="New Questions">أسئلة جديدة</span></button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ <span data-ar="مسح التقدم" data-en="Clear Progress">مسح التقدم</span></button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-blue-500">
+<div class="text-center">
+<div class="inline-block bg-blue-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH GRADE 11 GENERAL - QUESTION 14</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📐 <span data-ar="استخدام النسب المثلثية لإيجاد قياسات زوايا وأضلاع المثلثات القائمة" data-en="Using Trigonometric Ratios to Find Sides & Angles of Right Triangles">استخدام النسب المثلثية لإيجاد قياسات زوايا وأضلاع المثلثات القائمة</span></h1>
+<h2 class="text-xl text-blue-700 font-semibold mb-2"><span data-ar="الوحدة 2 - الدرس 2-4: حساب المثلثات | ص 116 (31 - 35)" data-en="Unit 2 - Lesson 2-4: Trigonometry | Page 116 (31-35)">الوحدة 2 - الدرس 2-4: حساب المثلثات | ص 116 (31 - 35)</span></h2>
+<p class="text-gray-600 mb-4"><span data-ar="جد x وقرب إلى أقرب جزء من عشرة باستخدام sin و cos و tan" data-en="Find x rounded to the nearest tenth using sin, cos, tan">جد x وقرب إلى أقرب جزء من عشرة باستخدام sin و cos و tan</span></p>
+<p class="text-sm text-green-600 font-semibold">💾 <span data-ar="يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام" data-en="Auto-saved - 30 questions in 6 sections">يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</span></p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 <span data-ar="التاريخ:" data-en="Date:">التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-blue-300 bg-transparent w-32 text-center"></span>
+<span>😊 <span data-ar="الاسم:" data-en="Name:">الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-blue-300 bg-transparent w-40 text-center" data-placeholder-ar="اكتب اسمك" data-placeholder-en="Your name" placeholder="اكتب اسمك"></span>
+<span>🏫 <span data-ar="الشعبة:" data-en="Class:">الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-blue-300 bg-transparent w-32 text-center" data-placeholder-ar="الشعبة" data-placeholder-en="Class" placeholder="الشعبة"></span>
+<span>⏰ <span data-ar="المدة: 45 دقيقة" data-en="Duration: 45 min">المدة: 45 دقيقة</span></span>
+<span>📊 <span data-ar="المجموع: 100 درجة" data-en="Total: 100 points">المجموع: 100 درجة</span></span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-blue-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-blue-800 text-center">📐 <span data-ar="النسب المثلثية الثلاث (SOH-CAH-TOA)" data-en="The Three Trig Ratios (SOH-CAH-TOA)">النسب المثلثية الثلاث (SOH-CAH-TOA)</span></h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>sin θ</strong> = <span data-ar="المقابل / الوتر" data-en="opp / hyp">المقابل / الوتر</span></div>
+<div class="formula-box"><strong>cos θ</strong> = <span data-ar="المجاور / الوتر" data-en="adj / hyp">المجاور / الوتر</span></div>
+<div class="formula-box"><strong>tan θ</strong> = <span data-ar="المقابل / المجاور" data-en="opp / adj">المقابل / المجاور</span></div>
+</div>
+<div id="method-holder" class="mt-2"></div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-blue-700 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 <span data-ar="صحح إجاباتي!" data-en="Grade My Exam!">صحح إجاباتي!</span></button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-blue-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 <span data-ar="نتيجتك يا بطل!" data-en="Your Result, Champion!">نتيجتك يا بطل!</span> 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-blue-50 p-4 rounded-xl text-center"><p>😊 <span data-ar="الاسم" data-en="Name">الاسم</span></p><p id="res-name" class="font-bold text-xl text-blue-700">-</p></div>
+<div class="bg-indigo-50 p-4 rounded-xl text-center"><p>📅 <span data-ar="التاريخ" data-en="Date">التاريخ</span></p><p id="res-date" class="font-bold text-xl text-indigo-700">-</p></div>
+<div class="bg-blue-50 p-4 rounded-xl text-center"><p>🌟 <span data-ar="المجموع" data-en="Total">المجموع</span></p><p id="res-total" class="font-bold text-3xl text-blue-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-blue-700 mt-2">0%</p>
+<p class="text-sm text-gray-500"><span data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</span></p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 <span data-ar="أداؤك في كل قسم:" data-en="Your Performance by Section:">أداؤك في كل قسم:</span></h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-blue-700 to-indigo-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 <span data-ar="أرسل النتيجة للمعلم" data-en="Send Result to Teacher">أرسل النتيجة للمعلم</span></button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Trigonometric Ratios - Grade 11 General | Mr. Mohammed Hesham 📐
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'trig_ratios_g11_v1';
+const TOTAL_TIME = 2700;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null, answersVisible = false, saveIndicatorTimeout = null;
+let currentLang = 'ar', timeRemaining = TOTAL_TIME, timerInterval;
+let examData, correctAnswersMap = {}, rng = null;
+
+function mulberry32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function showSaveIndicator(){const i=document.getElementById('saveIndicator');i.classList.add('show');if(saveIndicatorTimeout)clearTimeout(saveIndicatorTimeout);saveIndicatorTimeout=setTimeout(()=>i.classList.remove('show'),1500)}
+function saveState(s=true){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({seed:currentSeed,lang:currentLang,studentName:document.getElementById('studentName').value,studentClass:document.getElementById('studentClass').value,examDate:document.getElementById('examDate').value,answers:getSelectedAnswers(),timeRemaining:timeRemaining,answersVisible:answersVisible,savedAt:Date.now()}));if(s)showSaveIndicator()}catch(e){console.error(e)}}
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);return s?JSON.parse(s):null}catch(e){return null}}
+function getSelectedAnswers(){const a={};for(let i=0;i<TOTAL_QUESTIONS;i++){const s=document.querySelector('input[name="q'+i+'"]:checked');if(s)a[i]=s.value}return a}
+function restoreAnswers(a){if(!a)return;for(const[i,v]of Object.entries(a)){const r=document.querySelector('input[name="q'+i+'"][value="'+v+'"]');if(r)r.checked=true}}
+function clearProgress(){if(confirm(currentLang==='ar'?'⚠️ هل أنت متأكد من مسح كل التقدم؟':'⚠️ Clear all progress?')){localStorage.removeItem(STORAGE_KEY);location.reload()}}
+function setupAnswerListeners(){document.getElementById('exam-content').addEventListener('change',e=>{if(e.target.type==='radio')saveState()})}
+function setupInputListeners(){['studentName','studentClass','examDate'].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener('input',()=>saveState(false));el.addEventListener('blur',()=>saveState())}})}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+fig_sohcahtoa: `<svg class="svg-graph" width="500" height="280" viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="490" height="270" rx="12" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="250" y="26" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📐 تعريف النسب بالنسبة للزاوية θ</text>
+<polygon points="90,200 330,200 330,70" fill="#bfdbfe" fill-opacity="0.5" stroke="#1d4ed8" stroke-width="2.5"/>
+<rect x="316" y="186" width="14" height="14" fill="none" stroke="#dc2626" stroke-width="2"/>
+<path d="M 122 200 A 32 32 0 0 0 116 182" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<text x="132" y="192" font-size="12" fill="#166534" font-weight="bold">θ</text>
+<text x="345" y="140" font-size="12" fill="#dc2626" font-weight="bold">المقابل</text>
+<text x="205" y="218" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">المجاور</text>
+<text x="185" y="125" font-size="12" fill="#dc2626" font-weight="bold">الوتر</text>
+<rect x="360" y="60" width="120" height="40" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="420" y="85" text-anchor="middle" font-size="11" fill="#166534" font-family="'Amiri',serif" font-weight="bold">sin θ = مقابل/وتر</text>
+<rect x="360" y="110" width="120" height="40" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="420" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">cos θ = مجاور/وتر</text>
+<rect x="360" y="160" width="120" height="40" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+<text x="420" y="185" text-anchor="middle" font-size="11" fill="#9f1239" font-family="'Amiri',serif" font-weight="bold">tan θ = مقابل/مجاور</text>
+<rect x="60" y="232" width="380" height="34" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="250" y="254" text-anchor="middle" font-size="10.5" fill="#92400e" font-weight="bold">💡 اختر النسبة حسب الضلعين المتوفرين (معلوم ومجهول)</text>
+</svg>`,
+
+fig_q31: `<svg class="svg-graph" width="480" height="280" viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="270" rx="12" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold">تمرين 31: مجاور معلوم والوتر مجهول ⇒ cos</text>
+<polygon points="120,60 340,60 140,240" fill="#bfdbfe" fill-opacity="0.5" stroke="#1d4ed8" stroke-width="2.5"/>
+<rect x="120" y="60" width="14" height="14" fill="none" stroke="#dc2626" stroke-width="2"/>
+<path d="M 312 60 A 28 28 0 0 1 318 78" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<text x="300" y="82" font-size="11" fill="#166534" font-weight="bold">63°</text>
+<text x="230" y="50" text-anchor="middle" font-size="12" fill="#075985" font-family="'Amiri',serif" font-weight="bold">15√3 (مجاور)</text>
+<text x="265" y="160" font-size="13" fill="#dc2626" font-family="'Amiri',serif" font-weight="bold">x (وتر)</text>
+<rect x="50" y="200" width="380" height="64" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="240" y="220" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">cos 63° = 15√3 / x</text>
+<text x="240" y="240" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">x = 25.98 / 0.454 ≈ 57.2</text>
+<text x="240" y="257" text-anchor="middle" font-size="9.5" fill="#166534" font-weight="bold">✓ الإجابة B</text>
+</svg>`,
+
+fig_q32: `<svg class="svg-graph" width="480" height="270" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="260" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#065f46" font-weight="bold">تمرين 32: مجاور معلوم ومقابل مجهول ⇒ tan</text>
+<polygon points="320,50 320,215 245,225" fill="#d1fae5" fill-opacity="0.5" stroke="#059669" stroke-width="2.5"/>
+<rect x="306" y="201" width="14" height="14" fill="none" stroke="#dc2626" stroke-width="2"/>
+<path d="M 320 78 A 28 28 0 0 0 306 84" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<text x="300" y="98" font-size="11" fill="#166534" font-weight="bold">29°</text>
+<text x="332" y="140" font-size="12" fill="#075985" font-family="'Amiri',serif" font-weight="bold">32 (مجاور)</text>
+<text x="270" y="245" font-size="12" fill="#dc2626" font-family="'Amiri',serif" font-weight="bold">x (مقابل)</text>
+<rect x="50" y="195" width="180" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="140" y="215" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">tan 29° = x / 32</text>
+<text x="140" y="235" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">x = 32 × 0.554 ≈ 17.7</text>
+<text x="140" y="250" text-anchor="middle" font-size="9.5" fill="#166534" font-weight="bold">✓ الإجابة C</text>
+</svg>`,
+
+fig_q33: `<svg class="svg-graph" width="480" height="270" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="260" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">تمرين 33: وتر معلوم ومقابل مجهول ⇒ sin</text>
+<polygon points="90,80 330,60 360,220" fill="#fbcfe8" fill-opacity="0.5" stroke="#db2777" stroke-width="2.5"/>
+<rect x="316" y="66" width="14" height="14" fill="none" stroke="#dc2626" stroke-width="2" transform="rotate(-5 323 73)"/>
+<path d="M 344 196 A 26 26 0 0 0 336 190" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<text x="322" y="204" font-size="11" fill="#166534" font-weight="bold">38°</text>
+<text x="200" y="52" text-anchor="middle" font-size="12" fill="#dc2626" font-family="'Amiri',serif" font-weight="bold">x (مقابل)</text>
+<text x="200" y="170" font-size="12" fill="#075985" font-family="'Amiri',serif" font-weight="bold">20√2 (وتر)</text>
+<rect x="50" y="200" width="380" height="60" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="240" y="220" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">sin 38° = x / (20√2)</text>
+<text x="240" y="240" text-anchor="middle" font-size="11.5" fill="#92400e" font-family="'Amiri',serif" font-weight="bold">x = 28.28 × 0.616 ≈ 17.4</text>
+<text x="240" y="255" text-anchor="middle" font-size="9.5" fill="#166534" font-weight="bold">✓ الإجابة A</text>
+</svg>`,
+
+fig_gym: `<svg class="svg-graph" width="480" height="250" viewBox="0 0 480 250" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="240" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#92400e" font-weight="bold">🤸 منصة الوثب: ارتفاع 6 cm وزاوية 14.5°</text>
+<line x1="70" y1="200" x2="420" y2="200" stroke="#92400e" stroke-width="4"/>
+<line x1="70" y1="200" x2="390" y2="120" stroke="#dc2626" stroke-width="4"/>
+<line x1="390" y1="120" x2="390" y2="200" stroke="#7c3aed" stroke-width="4"/>
+<rect x="376" y="186" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2"/>
+<path d="M 108 192 A 40 40 0 0 0 106 182" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="118" y="186" font-size="10" fill="#166534" font-weight="bold">14.5°</text>
+<text x="402" y="165" font-size="12" fill="#7c3aed" font-weight="bold">6</text>
+<text x="215" y="145" font-size="12" fill="#dc2626" font-family="'Amiri',serif" font-weight="bold">L (الطول)</text>
+<rect x="60" y="212" width="360" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="240" y="231" text-anchor="middle" font-size="11" fill="#166534" font-family="'Amiri',serif" font-weight="bold">sin 14.5° = 6/L ⇒ L = 6/0.2504 ≈ 24.0 cm</text>
+</svg>`,
+
+fig_escalator: `<svg class="svg-graph" width="480" height="250" viewBox="0 0 480 250" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="240" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#5b21b6" font-weight="bold">🛗 السلّم المتحرك: زاوية 55° ومسار 29.9 m</text>
+<line x1="70" y1="200" x2="420" y2="200" stroke="#92400e" stroke-width="4"/>
+<line x1="70" y1="200" x2="360" y2="60" stroke="#dc2626" stroke-width="4"/>
+<g stroke="#dc2626" stroke-width="1.5"><line x1="120" y1="176" x2="132" y2="182"/><line x1="170" y1="152" x2="182" y2="158"/><line x1="220" y1="128" x2="232" y2="134"/><line x1="270" y1="104" x2="282" y2="110"/></g>
+<line x1="360" y1="60" x2="360" y2="200" stroke="#7c3aed" stroke-width="4"/>
+<rect x="346" y="186" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2"/>
+<path d="M 108 182 A 40 40 0 0 0 102 172" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="114" y="176" font-size="10" fill="#166534" font-weight="bold">55°</text>
+<text x="200" y="110" font-size="12" fill="#dc2626" font-weight="bold">29.9 m (وتر)</text>
+<text x="372" y="135" font-size="12" fill="#7c3aed" font-weight="bold">h</text>
+<rect x="60" y="212" width="360" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="240" y="231" text-anchor="middle" font-size="11" fill="#166534" font-family="'Amiri',serif" font-weight="bold">sin 55° = h/29.9 ⇒ h = 29.9 × 0.819 ≈ 24.5 m</text>
+</svg>`,
+
+fig_ladder: `<svg class="svg-graph" width="480" height="250" viewBox="0 0 480 250" xmlns="http://www.w3.org/2000/svg">
+<rect x="5" y="5" width="470" height="240" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+<text x="240" y="26" text-anchor="middle" font-size="13" fill="#991b1b" font-weight="bold">🪜 سلّم 5 m يميل بزاوية 60° على الأرض</text>
+<line x1="100" y1="40" x2="100" y2="200" stroke="#7c3aed" stroke-width="5"/>
+<line x1="60" y1="200" x2="430" y2="200" stroke="#92400e" stroke-width="5"/>
+<line x1="100" y1="60" x2="260" y2="200" stroke="#dc2626" stroke-width="4"/>
+<g stroke="#dc2626" stroke-width="2"><line x1="126" y1="82" x2="116" y2="94"/><line x1="156" y1="108" x2="146" y2="120"/><line x1="186" y1="134" x2="176" y2="146"/><line x1="216" y1="160" x2="206" y2="172"/></g>
+<rect x="100" y="186" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2"/>
+<path d="M 232 200 A 28 28 0 0 0 226 184" fill="none" stroke="#16a34a" stroke-width="2"/>
+<text x="216" y="192" font-size="10" fill="#166534" font-weight="bold">60°</text>
+<text x="80" y="135" font-size="12" fill="#7c3aed" font-weight="bold">h</text>
+<text x="195" y="115" font-size="12" fill="#dc2626" font-weight="bold">5 m</text>
+<rect x="60" y="212" width="360" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="240" y="231" text-anchor="middle" font-size="11" fill="#166534" font-family="'Amiri',serif" font-weight="bold">sin 60° = h/5 ⇒ h = 5 × 0.866 ≈ 4.3 m</text>
+</svg>`
+};
+
+// ==================== EXAM DATA ====================
+const originalExamData = {
+sections: [
+{ id:'s1', title:{ar:'🔹 القسم 1: إيجاد الوتر بـ cos (مثل 31) (Q1-Q5)',en:'🔹 Section 1: Hypotenuse via cos (like 31) (Q1-Q5)'}, questions:[
+{ q:{ar:'<strong>السؤال 1 (تمرين 31):</strong> جد x وقرب إلى أقرب جزء من عشرة: مجاور الزاوية 63° هو 15√3 و x هو الوتر.',en:'<strong>Q1 (Ex.31):</strong> Find x to the nearest tenth: adjacent to 63° is 15√3, x is the hypotenuse.'},
+  svg: svgGraphs.fig_q31,
+  options:[{ar:'<span class="math-display">51.0</span>',en:'<span class="math-display">51.0</span>'},{ar:'<span class="math-display">57.2</span>',en:'<span class="math-display">57.2</span>'},{ar:'<span class="math-display">11.8</span>',en:'<span class="math-display">11.8</span>'},{ar:'<span class="math-display">29.2</span>',en:'<span class="math-display">29.2</span>'}],
+  correct:1, answer:{ar:'cos 63° = 15√3/x ⇒ x = 25.98/0.454 ≈ 57.2',en:'x = 15√3/cos 63° ≈ 57.2'} },
+{ q:{ar:'<strong>السؤال 2:</strong> مثلث قائم: مجاور الزاوية 40° يساوي 10 والوتر x. جد x لأقرب جزء من عشرة.',en:'<strong>Q2:</strong> Right triangle: adjacent to 40° is 10, hypotenuse x. Find x.'},
+  options:[{ar:'<span class="math-display">7.7</span>',en:'<span class="math-display">7.7</span>'},{ar:'<span class="math-display">13.1</span>',en:'<span class="math-display">13.1</span>'},{ar:'<span class="math-display">15.6</span>',en:'<span class="math-display">15.6</span>'},{ar:'<span class="math-display">6.4</span>',en:'<span class="math-display">6.4</span>'}],
+  correct:1, answer:{ar:'x = 10/cos 40° = 10/0.766 ≈ 13.1',en:'x ≈ 13.1'} },
+{ q:{ar:'<strong>السؤال 3:</strong> مثلث قائم: مجاور الزاوية 25° يساوي 8 والوتر x. جد x.',en:'<strong>Q3:</strong> Adjacent to 25° is 8, hypotenuse x. Find x.'},
+  options:[{ar:'<span class="math-display">3.4</span>',en:'<span class="math-display">3.4</span>'},{ar:'<span class="math-display">18.9</span>',en:'<span class="math-display">18.9</span>'},{ar:'<span class="math-display">8.8</span>',en:'<span class="math-display">8.8</span>'},{ar:'<span class="math-display">7.3</span>',en:'<span class="math-display">7.3</span>'}],
+  correct:2, answer:{ar:'x = 8/cos 25° = 8/0.906 ≈ 8.8',en:'x ≈ 8.8'} },
+{ q:{ar:'<strong>السؤال 4:</strong> مثلث قائم: مجاور الزاوية 55° يساوي 12 والوتر x. جد x.',en:'<strong>Q4:</strong> Adjacent to 55° is 12, hypotenuse x. Find x.'},
+  options:[{ar:'<span class="math-display">6.9</span>',en:'<span class="math-display">6.9</span>'},{ar:'<span class="math-display">9.8</span>',en:'<span class="math-display">9.8</span>'},{ar:'<span class="math-display">21.9</span>',en:'<span class="math-display">21.9</span>'},{ar:'<span class="math-display">20.9</span>',en:'<span class="math-display">20.9</span>'}],
+  correct:3, answer:{ar:'x = 12/cos 55° = 12/0.574 ≈ 20.9',en:'x ≈ 20.9'} },
+{ q:{ar:'<strong>السؤال 5:</strong> مثلث قائم: مجاور الزاوية 30° يساوي 6√2 والوتر x. جد x.',en:'<strong>Q5:</strong> Adjacent to 30° is 6√2, hypotenuse x. Find x.'},
+  options:[{ar:'<span class="math-display">9.8</span>',en:'<span class="math-display">9.8</span>'},{ar:'<span class="math-display">7.4</span>',en:'<span class="math-display">7.4</span>'},{ar:'<span class="math-display">12.3</span>',en:'<span class="math-display">12.3</span>'},{ar:'<span class="math-display">4.9</span>',en:'<span class="math-display">4.9</span>'}],
+  correct:0, answer:{ar:'x = 6√2/cos 30° = 8.49/0.866 ≈ 9.8',en:'x ≈ 9.8'} }
+]},
+{ id:'s2', title:{ar:'🔹 القسم 2: إيجاد المقابل بـ tan (مثل 32) (Q6-Q10)',en:'🔹 Section 2: Opposite via tan (like 32) (Q6-Q10)'}, questions:[
+{ q:{ar:'<strong>السؤال 6 (تمرين 32):</strong> جد x: زاوية 29°، المجاور 32، و x المقابل.',en:'<strong>Q6 (Ex.32):</strong> Find x: angle 29°, adjacent 32, x opposite.'},
+  svg: svgGraphs.fig_q32,
+  options:[{ar:'<span class="math-display">28.0</span>',en:'<span class="math-display">28.0</span>'},{ar:'<span class="math-display">15.5</span>',en:'<span class="math-display">15.5</span>'},{ar:'<span class="math-display">17.7</span>',en:'<span class="math-display">17.7</span>'},{ar:'<span class="math-display">57.7</span>',en:'<span class="math-display">57.7</span>'}],
+  correct:2, answer:{ar:'tan 29° = x/32 ⇒ x = 32 × 0.554 ≈ 17.7',en:'x ≈ 17.7'} },
+{ q:{ar:'<strong>السؤال 7:</strong> مثلث قائم: زاوية 35°، المجاور 20، والمقابل x. جد x.',en:'<strong>Q7:</strong> Angle 35°, adjacent 20, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">16.4</span>',en:'<span class="math-display">16.4</span>'},{ar:'<span class="math-display">14.0</span>',en:'<span class="math-display">14.0</span>'},{ar:'<span class="math-display">11.5</span>',en:'<span class="math-display">11.5</span>'},{ar:'<span class="math-display">28.0</span>',en:'<span class="math-display">28.0</span>'}],
+  correct:1, answer:{ar:'x = 20 tan 35° = 20 × 0.700 = 14.0',en:'x = 14.0'} },
+{ q:{ar:'<strong>السؤال 8:</strong> مثلث قائم: زاوية 50°، المجاور 9، والمقابل x. جد x.',en:'<strong>Q8:</strong> Angle 50°, adjacent 9, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">7.6</span>',en:'<span class="math-display">7.6</span>'},{ar:'<span class="math-display">5.8</span>',en:'<span class="math-display">5.8</span>'},{ar:'<span class="math-display">10.7</span>',en:'<span class="math-display">10.7</span>'},{ar:'<span class="math-display">16.9</span>',en:'<span class="math-display">16.9</span>'}],
+  correct:2, answer:{ar:'x = 9 tan 50° = 9 × 1.192 ≈ 10.7',en:'x ≈ 10.7'} },
+{ q:{ar:'<strong>السؤال 9:</strong> مثلث قائم: زاوية 18°، المجاور 45، والمقابل x. جد x.',en:'<strong>Q9:</strong> Angle 18°, adjacent 45, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">14.6</span>',en:'<span class="math-display">14.6</span>'},{ar:'<span class="math-display">13.9</span>',en:'<span class="math-display">13.9</span>'},{ar:'<span class="math-display">42.8</span>',en:'<span class="math-display">42.8</span>'},{ar:'<span class="math-display">1.5</span>',en:'<span class="math-display">1.5</span>'}],
+  correct:0, answer:{ar:'x = 45 tan 18° = 45 × 0.325 ≈ 14.6',en:'x ≈ 14.6'} },
+{ q:{ar:'<strong>السؤال 10:</strong> مثلث قائم: زاوية 62°، المجاور 7، والمقابل x. جد x.',en:'<strong>Q10:</strong> Angle 62°, adjacent 7, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">3.3</span>',en:'<span class="math-display">3.3</span>'},{ar:'<span class="math-display">7.4</span>',en:'<span class="math-display">7.4</span>'},{ar:'<span class="math-display">21.3</span>',en:'<span class="math-display">21.3</span>'},{ar:'<span class="math-display">13.2</span>',en:'<span class="math-display">13.2</span>'}],
+  correct:3, answer:{ar:'x = 7 tan 62° = 7 × 1.881 ≈ 13.2',en:'x ≈ 13.2'} }
+]},
+{ id:'s3', title:{ar:'🔹 القسم 3: إيجاد المقابل بـ sin (مثل 33) (Q11-Q15)',en:'🔹 Section 3: Opposite via sin (like 33) (Q11-Q15)'}, questions:[
+{ q:{ar:'<strong>السؤال 11 (تمرين 33):</strong> جد x: زاوية 38°، الوتر 20√2، و x المقابل.',en:'<strong>Q11 (Ex.33):</strong> Find x: angle 38°, hypotenuse 20√2, x opposite.'},
+  svg: svgGraphs.fig_q33,
+  options:[{ar:'<span class="math-display">17.4</span>',en:'<span class="math-display">17.4</span>'},{ar:'<span class="math-display">22.3</span>',en:'<span class="math-display">22.3</span>'},{ar:'<span class="math-display">13.6</span>',en:'<span class="math-display">13.6</span>'},{ar:'<span class="math-display">36.2</span>',en:'<span class="math-display">36.2</span>'}],
+  correct:0, answer:{ar:'x = 20√2 × sin 38° = 28.28 × 0.616 ≈ 17.4',en:'x ≈ 17.4'} },
+{ q:{ar:'<strong>السؤال 12:</strong> مثلث قائم: زاوية 30°، الوتر 16، والمقابل x. جد x.',en:'<strong>Q12:</strong> Angle 30°, hypotenuse 16, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">16.0</span>',en:'<span class="math-display">16.0</span>'},{ar:'<span class="math-display">11.3</span>',en:'<span class="math-display">11.3</span>'},{ar:'<span class="math-display">8.0</span>',en:'<span class="math-display">8.0</span>'},{ar:'<span class="math-display">5.7</span>',en:'<span class="math-display">5.7</span>'}],
+  correct:2, answer:{ar:'x = 16 sin 30° = 16 × 0.5 = 8.0',en:'x = 8.0'} },
+{ q:{ar:'<strong>السؤال 13:</strong> مثلث قائم: زاوية 45°، الوتر 10، والمقابل x. جد x.',en:'<strong>Q13:</strong> Angle 45°, hypotenuse 10, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">7.0</span>',en:'<span class="math-display">7.0</span>'},{ar:'<span class="math-display">7.1</span>',en:'<span class="math-display">7.1</span>'},{ar:'<span class="math-display">14.1</span>',en:'<span class="math-display">14.1</span>'},{ar:'<span class="math-display">5.0</span>',en:'<span class="math-display">5.0</span>'}],
+  correct:1, answer:{ar:'x = 10 sin 45° = 10 × 0.707 ≈ 7.1',en:'x ≈ 7.1'} },
+{ q:{ar:'<strong>السؤال 14:</strong> مثلث قائم: زاوية 70°، الوتر 25، والمقابل x. جد x.',en:'<strong>Q14:</strong> Angle 70°, hypotenuse 25, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">8.6</span>',en:'<span class="math-display">8.6</span>'},{ar:'<span class="math-display">26.6</span>',en:'<span class="math-display">26.6</span>'},{ar:'<span class="math-display">15.5</span>',en:'<span class="math-display">15.5</span>'},{ar:'<span class="math-display">23.5</span>',en:'<span class="math-display">23.5</span>'}],
+  correct:3, answer:{ar:'x = 25 sin 70° = 25 × 0.940 ≈ 23.5',en:'x ≈ 23.5'} },
+{ q:{ar:'<strong>السؤال 15:</strong> مثلث قائم: زاوية 22°، الوتر 40، والمقابل x. جد x.',en:'<strong>Q15:</strong> Angle 22°, hypotenuse 40, opposite x. Find x.'},
+  options:[{ar:'<span class="math-display">37.0</span>',en:'<span class="math-display">37.0</span>'},{ar:'<span class="math-display">10.4</span>',en:'<span class="math-display">10.4</span>'},{ar:'<span class="math-display">15.0</span>',en:'<span class="math-display">15.0</span>'},{ar:'<span class="math-display">9.6</span>',en:'<span class="math-display">9.6</span>'}],
+  correct:2, answer:{ar:'x = 40 sin 22° = 40 × 0.375 = 15.0',en:'x = 15.0'} }
+]},
+{ id:'s4', title:{ar:'🔹 القسم 4: مسائل لفظية (مثل 34، 35) (Q16-Q20)',en:'🔹 Section 4: Word Problems (like 34, 35) (Q16-Q20)'}, questions:[
+{ q:{ar:'<strong>السؤال 16 (تمرين 34):</strong> منصة الوثب يبلغ ارتفاعها 6 cm وتشكل زاوية 14.5° مع القاعدة. ما طول المنصة تقريباً؟',en:'<strong>Q16 (Ex.34):</strong> A springboard is 6 cm high and makes 14.5° with the base. Its length?'},
+  svg: svgGraphs.fig_gym,
+  options:[{ar:'<span class="math-display">6.2 cm</span>',en:'<span class="math-display">6.2 cm</span>'},{ar:'<span class="math-display">23.2 cm</span>',en:'<span class="math-display">23.2 cm</span>'},{ar:'<span class="math-display">1.5 cm</span>',en:'<span class="math-display">1.5 cm</span>'},{ar:'<span class="math-display">24.0 cm</span>',en:'<span class="math-display">24.0 cm</span>'}],
+  correct:3, answer:{ar:'الارتفاع مقابل الزاوية والطول هو الوتر: sin 14.5° = 6/L ⇒ L = 6/0.2504 ≈ 24.0 cm',en:'L = 6/sin 14.5° ≈ 24.0 cm'} },
+{ q:{ar:'<strong>السؤال 17 (تمرين 35):</strong> زاوية صعود السلّم المتحرك 55° وطول المسار 29.9 m. ما ارتفاعه؟',en:'<strong>Q17 (Ex.35):</strong> Escalator rises at 55°; path length 29.9 m. Its height?'},
+  svg: svgGraphs.fig_escalator,
+  options:[{ar:'<span class="math-display">24.5 m</span>',en:'<span class="math-display">24.5 m</span>'},{ar:'<span class="math-display">17.2 m</span>',en:'<span class="math-display">17.2 m</span>'},{ar:'<span class="math-display">42.7 m</span>',en:'<span class="math-display">42.7 m</span>'},{ar:'<span class="math-display">36.5 m</span>',en:'<span class="math-display">36.5 m</span>'}],
+  correct:0, answer:{ar:'h = 29.9 × sin 55° = 29.9 × 0.819 ≈ 24.5 m',en:'h ≈ 24.5 m'} },
+{ q:{ar:'<strong>السؤال 18:</strong> سلّم طوله 5 m يستند إلى جدار ويشكل زاوية 60° مع الأرض. ما ارتفاع مستنده؟',en:'<strong>Q18:</strong> A 5 m ladder makes 60° with the ground. Height on the wall?'},
+  svg: svgGraphs.fig_ladder,
+  options:[{ar:'<span class="math-display">2.5 m</span>',en:'<span class="math-display">2.5 m</span>'},{ar:'<span class="math-display">4.3 m</span>',en:'<span class="math-display">4.3 m</span>'},{ar:'<span class="math-display">5.8 m</span>',en:'<span class="math-display">5.8 m</span>'},{ar:'<span class="math-display">8.7 m</span>',en:'<span class="math-display">8.7 m</span>'}],
+  correct:1, answer:{ar:'h = 5 sin 60° = 5 × 0.866 ≈ 4.3 m',en:'h ≈ 4.3 m'} },
+{ q:{ar:'<strong>السؤال 19:</strong> خيط طائرة ورقية طوله 80 m يصنع زاوية 35° مع الأرض. ما ارتفاع الطائرة؟',en:'<strong>Q19:</strong> A kite string 80 m makes 35° with the ground. Kite height?'},
+  options:[{ar:'<span class="math-display">65.5 m</span>',en:'<span class="math-display">65.5 m</span>'},{ar:'<span class="math-display">27.4 m</span>',en:'<span class="math-display">27.4 m</span>'},{ar:'<span class="math-display">80.0 m</span>',en:'<span class="math-display">80.0 m</span>'},{ar:'<span class="math-display">45.9 m</span>',en:'<span class="math-display">45.9 m</span>'}],
+  correct:3, answer:{ar:'h = 80 sin 35° = 80 × 0.574 ≈ 45.9 m',en:'h ≈ 45.9 m'} },
+{ q:{ar:'<strong>السؤال 20:</strong> منحدر طوله 12 m يميل بزاوية 15°. ما ارتفاعه الرأسي؟',en:'<strong>Q20:</strong> A 12 m ramp inclined at 15°. Vertical height?'},
+  options:[{ar:'<span class="math-display">11.6 m</span>',en:'<span class="math-display">11.6 m</span>'},{ar:'<span class="math-display">6.2 m</span>',en:'<span class="math-display">6.2 m</span>'},{ar:'<span class="math-display">3.1 m</span>',en:'<span class="math-display">3.1 m</span>'},{ar:'<span class="math-display">12.4 m</span>',en:'<span class="math-display">12.4 m</span>'}],
+  correct:2, answer:{ar:'h = 12 sin 15° = 12 × 0.259 ≈ 3.1 m',en:'h ≈ 3.1 m'} }
+]},
+{ id:'s5', title:{ar:'🔹 القسم 5: إيجاد أضلاع متنوعة (Q21-Q25)',en:'🔹 Section 5: Finding Various Sides (Q21-Q25)'}, questions:[
+{ q:{ar:'<strong>السؤال 21:</strong> إذا كان <span class="math-display">sin 30° = 5/x</span> حيث x الوتر، فـ x =',en:'<strong>Q21:</strong> If <span class="math-display">sin 30° = 5/x</span> with x the hypotenuse, then x ='},
+  options:[{ar:'<span class="math-display">2.5</span>',en:'<span class="math-display">2.5</span>'},{ar:'<span class="math-display">5.8</span>',en:'<span class="math-display">5.8</span>'},{ar:'<span class="math-display">10</span>',en:'<span class="math-display">10</span>'},{ar:'<span class="math-display">15</span>',en:'<span class="math-display">15</span>'}],
+  correct:2, answer:{ar:'x = 5/sin 30° = 5/0.5 = 10',en:'x = 10'} },
+{ q:{ar:'<strong>السؤال 22:</strong> مثلث قائم: <span class="math-display">cos 45° = x/14</span> (x المجاور). جد x.',en:'<strong>Q22:</strong> <span class="math-display">cos 45° = x/14</span> (x adjacent). Find x.'},
+  options:[{ar:'<span class="math-display">19.8</span>',en:'<span class="math-display">19.8</span>'},{ar:'<span class="math-display">9.9</span>',en:'<span class="math-display">9.9</span>'},{ar:'<span class="math-display">7.0</span>',en:'<span class="math-display">7.0</span>'},{ar:'<span class="math-display">14.9</span>',en:'<span class="math-display">14.9</span>'}],
+  correct:1, answer:{ar:'x = 14 cos 45° = 14 × 0.707 ≈ 9.9',en:'x ≈ 9.9'} },
+{ q:{ar:'<strong>السؤال 23:</strong> مثلث قائم: <span class="math-display">tan 40° = 12/x</span> (x المجاور). جد x.',en:'<strong>Q23:</strong> <span class="math-display">tan 40° = 12/x</span> (x adjacent). Find x.'},
+  options:[{ar:'<span class="math-display">10.1</span>',en:'<span class="math-display">10.1</span>'},{ar:'<span class="math-display">12.8</span>',en:'<span class="math-display">12.8</span>'},{ar:'<span class="math-display">18.6</span>',en:'<span class="math-display">18.6</span>'},{ar:'<span class="math-display">14.3</span>',en:'<span class="math-display">14.3</span>'}],
+  correct:3, answer:{ar:'x = 12/tan 40° = 12/0.839 ≈ 14.3',en:'x ≈ 14.3'} },
+{ q:{ar:'<strong>السؤال 24:</strong> مثلث قائم: <span class="math-display">cos 60° = x/18</span> (x المجاور). جد x.',en:'<strong>Q24:</strong> <span class="math-display">cos 60° = x/18</span> (x adjacent). Find x.'},
+  options:[{ar:'<span class="math-display">36.0</span>',en:'<span class="math-display">36.0</span>'},{ar:'<span class="math-display">12.7</span>',en:'<span class="math-display">12.7</span>'},{ar:'<span class="math-display">9.0</span>',en:'<span class="math-display">9.0</span>'},{ar:'<span class="math-display">4.5</span>',en:'<span class="math-display">4.5</span>'}],
+  correct:2, answer:{ar:'x = 18 cos 60° = 18 × 0.5 = 9.0',en:'x = 9.0'} },
+{ q:{ar:'<strong>السؤال 25:</strong> مثلث قائم: <span class="math-display">sin 55° = x/32</span> (x المقابل). جد x.',en:'<strong>Q25:</strong> <span class="math-display">sin 55° = x/32</span> (x opposite). Find x.'},
+  options:[{ar:'<span class="math-display">18.4</span>',en:'<span class="math-display">18.4</span>'},{ar:'<span class="math-display">26.2</span>',en:'<span class="math-display">26.2</span>'},{ar:'<span class="math-display">39.1</span>',en:'<span class="math-display">39.1</span>'},{ar:'<span class="math-display">21.0</span>',en:'<span class="math-display">21.0</span>'}],
+  correct:1, answer:{ar:'x = 32 sin 55° = 32 × 0.819 ≈ 26.2',en:'x ≈ 26.2'} }
+]},
+{ id:'s6', title:{ar:'🔹 القسم 6: اختيار النسبة الصحيحة (Q26-Q30)',en:'🔹 Section 6: Choosing the Right Ratio (Q26-Q30)'}, questions:[
+{ q:{ar:'<strong>السؤال 26:</strong> في مثلث قائم، النسبة <span class="math-display">sin θ</span> تساوي:',en:'<strong>Q26:</strong> In a right triangle, sin θ equals:'},
+  svg: svgGraphs.fig_sohcahtoa,
+  options:[{ar:'المجاور / الوتر',en:'adjacent / hypotenuse'},{ar:'المقابل / المجاور',en:'opposite / adjacent'},{ar:'المقابل / الوتر',en:'opposite / hypotenuse'},{ar:'الوتر / المقابل',en:'hypotenuse / opposite'}],
+  correct:2, answer:{ar:'sin = المقابل ÷ الوتر',en:'sin = opp/hyp'} },
+{ q:{ar:'<strong>السؤال 27:</strong> النسبة <span class="math-display">tan θ</span> تساوي:',en:'<strong>Q27:</strong> tan θ equals:'},
+  options:[{ar:'المقابل / المجاور',en:'opposite / adjacent'},{ar:'المقابل / الوتر',en:'opposite / hypotenuse'},{ar:'المجاور / الوتر',en:'adjacent / hypotenuse'},{ar:'المجاور / المقابل',en:'adjacent / opposite'}],
+  correct:0, answer:{ar:'tan = المقابل ÷ المجاور',en:'tan = opp/adj'} },
+{ q:{ar:'<strong>السؤال 28:</strong> النسبة <span class="math-display">cos θ</span> تساوي:',en:'<strong>Q28:</strong> cos θ equals:'},
+  options:[{ar:'المقابل / الوتر',en:'opposite / hypotenuse'},{ar:'المجاور / الوتر',en:'adjacent / hypotenuse'},{ar:'المقابل / المجاور',en:'opposite / adjacent'},{ar:'المجاور / المقابل',en:'adjacent / opposite'}],
+  correct:1, answer:{ar:'cos = المجاور ÷ الوتر',en:'cos = adj/hyp'} },
+{ q:{ar:'<strong>السؤال 29:</strong> تعرف المقابل والزاوية وتريد الوتر. أي نسبة تستخدم؟',en:'<strong>Q29:</strong> You know the opposite and the angle; you want the hypotenuse. Which ratio?'},
+  options:[{ar:'cos',en:'cos'},{ar:'sin',en:'sin'},{ar:'tan',en:'tan'},{ar:'نظرية فيثاغورس فقط',en:'Pythagorean theorem only'}],
+  correct:1, answer:{ar:'sin تربط المقابل بالوتر ⇒ sin',en:'sin relates opposite to hypotenuse'} },
+{ q:{ar:'<strong>السؤال 30:</strong> تعرف المقابل والزاوية وتريد المجاور. أي نسبة تستخدم؟',en:'<strong>Q30:</strong> You know the opposite and the angle; you want the adjacent. Which ratio?'},
+  options:[{ar:'sin',en:'sin'},{ar:'cos',en:'cos'},{ar:'tan',en:'tan'},{ar:'نظرية فيثاغورس فقط',en:'Pythagorean theorem only'}],
+  correct:2, answer:{ar:'tan تربط المقابل بالمجاور ⇒ tan',en:'tan relates opposite to adjacent'} }
+]}
+]};
+
+function shuffleArray(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function prepareShuffledExam(){rng=mulberry32(currentSeed);examData=JSON.parse(JSON.stringify(originalExamData));correctAnswersMap={};let g=0;examData.sections.forEach(s=>{s.questions=shuffleArray(s.questions);s.questions.forEach(q=>{const oc=q.options.map((o,i)=>({option:o,isCorrect:i===q.correct}));const sh=shuffleArray(oc);q.options=sh.map(o=>o.option);q.correct=sh.findIndex(o=>o.isCorrect);correctAnswersMap[g]=String.fromCharCode(97+q.correct);g++})})}
+function reshuffleExam(){if(confirm(currentLang==='ar'?'🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟':'🔄 New questions will be generated. Are you sure?')){currentSeed=Date.now();timeRemaining=TOTAL_TIME;answersVisible=false;prepareShuffledExam();renderExam();saveState();alert(currentLang==='ar'?'🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀':' Questions changed! Good luck! 🍀');window.scrollTo({top:0,behavior:'smooth'})}}
+function setLanguage(lang){currentLang=lang;document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.getElementById('btn-ar').classList.toggle('active',lang==='ar');document.getElementById('btn-en').classList.toggle('active',lang==='en');document.body.classList.toggle('en-mode',lang==='en');document.querySelectorAll('[data-ar]').forEach(el=>{el.textContent=el.getAttribute('data-'+lang)});document.querySelectorAll('[data-placeholder-ar]').forEach(el=>{el.placeholder=el.getAttribute('data-placeholder-'+lang)});renderExam();saveState(false)}
+function renderExam(){const container=document.getElementById('exam-content');const lbl={option:['a)','b)','c)','d)'],answer:currentLang==='ar'?'✅ الإجابة:':'✅ Answer:'};let html='',g=0;
+examData.sections.forEach((section,si)=>{const bc=['module-1','module-2','module-3','module-4','module-5','module-6'][si];html+='<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-blue-100"><div class="text-center mb-4"><span class="module-badge '+bc+'">'+section.title[currentLang]+'</span></div><ol class="space-y-4 text-sm">';
+section.questions.forEach(q=>{html+='<li class="border-r-4 border-blue-400 pr-4 py-2" id="q-'+g+'" style="border-right:4px solid #1d4ed8;padding-right:1rem;"><strong class="text-blue-700">'+(g+1)+'.</strong> '+q.q[currentLang]+'<br>';
+if(q.svg)html+='<div class="graph-container">'+q.svg+'</div>';
+q.options.forEach((opt,oi)=>{html+='<label class="cursor-pointer block mt-2 mr-4 hover:bg-blue-50 rounded-lg p-2 transition" style="margin-right:1rem;"><input type="radio" name="q'+g+'" value="'+String.fromCharCode(97+oi)+'" class="mr-2 ml-2"><span class="arabic-math">'+lbl.option[oi]+' '+opt[currentLang]+'</span></label>'});
+html+='<div class="answer-box text-green-700 mt-3 font-medium '+(answersVisible?'':'hidden')+' bg-green-50 rounded-lg p-3 border border-green-200">'+lbl.answer+' '+lbl.option[q.correct]+' <span class="arabic-math">'+q.options[q.correct][currentLang]+'</span><br><span class="text-sm text-green-700 mt-2 block arabic-math">'+q.answer[currentLang]+'</span></div></li>';g++});
+html+='</ol></section>'});
+container.innerHTML=html}
+function startTimer(){updateTimerDisplay();timerInterval=setInterval(()=>{timeRemaining--;updateTimerDisplay();if(timeRemaining%60===0)saveState(false);if(timeRemaining<=600)document.getElementById('timer').classList.add('timer-warning');if(timeRemaining<=0){clearInterval(timerInterval);alert(currentLang==='ar'?'⏰ انتهى الوقت!':"⏰ Time's up!");gradeExam()}},1000)}
+function updateTimerDisplay(){const m=Math.floor(timeRemaining/60),s=timeRemaining%60;document.getElementById('timer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function toggleAnswers(){answersVisible=!answersVisible;document.querySelectorAll('.answer-box').forEach(el=>el.classList.toggle('hidden',!answersVisible));saveState(false)}
+function gradeExam(){let cc=0;const ss=new Array(TOTAL_SECTIONS).fill(0);
+for(let i=0;i<TOTAL_QUESTIONS;i++){const sel=document.querySelector('input[name="q'+i+'"]:checked');const li=document.getElementById('q-'+i);if(li){const ok=sel&&sel.value===correctAnswersMap[i];if(ok){cc++;li.classList.add('correct');li.classList.remove('incorrect');ss[Math.floor(i/QUESTIONS_PER_SECTION)]++}else{li.classList.add('incorrect');li.classList.remove('correct')}}}
+const score=Math.round(cc/TOTAL_QUESTIONS*100);document.getElementById('res-total').textContent=score+' / 100';document.getElementById('res-name').textContent=document.getElementById('studentName').value||(currentLang==='ar'?'بطل':'Champion');document.getElementById('res-date').textContent=new Date().toLocaleDateString(currentLang==='ar'?'ar-AE':'en-US');
+const pc=document.getElementById('sections-performance');pc.innerHTML='';examData.sections.forEach((s,i)=>{pc.innerHTML+='<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">'+s.title[currentLang]+'</span><span class="font-bold text-blue-700">'+ss[i]+'/'+QUESTIONS_PER_SECTION+'</span></div>'});
+const badge=document.getElementById('success-badge');document.getElementById('success-percent').textContent=score+'%';
+if(currentLang==='ar'){if(score>=90){badge.textContent='🌟 ممتاز جداً!';badge.className='success-badge grade-excellent'}else if(score>=75){badge.textContent='👏 ممتاز!';badge.className='success-badge grade-good'}else if(score>=50){badge.textContent='👍 جيد';badge.className='success-badge grade-pass'}else{badge.textContent='💪 حاول مرة أخرى';badge.className='success-badge grade-fail'}}
+else{if(score>=90){badge.textContent='🌟 Outstanding!';badge.className='success-badge grade-excellent'}else if(score>=75){badge.textContent='👏 Excellent!';badge.className='success-badge grade-good'}else if(score>=50){badge.textContent='👍 Good';badge.className='success-badge grade-pass'}else{badge.textContent='💪 Try Again';badge.className='success-badge grade-fail'}}
+document.getElementById('results-panel').classList.remove('hidden');document.getElementById('results-panel').scrollIntoView({behavior:'smooth'});if(timerInterval)clearInterval(timerInterval)}
+function sendResultsToEmail(){const btn=document.getElementById('sendEmailBtn'),status=document.getElementById('emailStatus');btn.disabled=true;btn.textContent=currentLang==='ar'?'⏳ جاري الإرسال...':'⏳ Sending...';
+const name=document.getElementById('studentName').value||'N/A',klass=document.getElementById('studentClass').value||'N/A',date=document.getElementById('examDate').value||new Date().toLocaleDateString(),score=document.getElementById('res-total').textContent,rate=document.getElementById('success-percent').textContent,badge=document.getElementById('success-badge').textContent;
+let qh='<div style="font-family:Arial;direction:rtl"><h2>📐 '+(currentLang==='ar'?'نتيجة امتحان النسب المثلثية - رياضيات 11 عام':'Trig Ratios Exam Result - Grade 11')+'</h2><p><b>الاسم:</b> '+name+'</p><p><b>الشعبة:</b> '+klass+'</p><p><b>التاريخ:</b> '+date+'</p><p><b>الدرجة:</b> '+score+' ('+rate+')</p><p><b>التقدير:</b> '+badge+'</p><hr><table style="width:100%;border-collapse:collapse"><tr style="background:#1d4ed8;color:white"><th style="padding:8px;border:1px solid #ddd">#</th><th style="padding:8px;border:1px solid #ddd">السؤال</th><th style="padding:8px;border:1px solid #ddd">إجابة الطالب</th><th style="padding:8px;border:1px solid #ddd">الصحيحة</th><th style="padding:8px;border:1px solid #ddd">النتيجة</th></tr>';
+let g=0;examData.sections.forEach(sec=>{qh+='<tr style="background:#dbeafe"><td colspan="5" style="padding:8px;font-weight:bold;border:1px solid #ddd">'+sec.title.ar+'</td></tr>';sec.questions.forEach(q=>{const sel=document.querySelector('input[name="q'+g+'"]:checked');const sv=sel?sel.value:null;const cv=correctAnswersMap[g];const ic=sv===cv;let sat=sv?q.options[sv.charCodeAt(0)-97][currentLang]:(currentLang==='ar'?'❌ لم يجب':'❌ No answer');const sac=ic?'#16a34a':'#dc2626';const cat=q.options[q.correct][currentLang];const rb=ic?'#f0fdf4':'#fef2f2';qh+='<tr style="background:'+rb+'"><td style="padding:8px;border:1px solid #ddd;text-align:center">'+(g+1)+'</td><td style="padding:8px;border:1px solid #ddd">'+q.q.ar.replace(/<[^>]+>/g,'').substring(0,70)+'...</td><td style="padding:8px;border:1px solid #ddd;color:'+sac+'">'+sat+'</td><td style="padding:8px;border:1px solid #ddd;color:#16a34a">'+cat+'</td><td style="padding:8px;border:1px solid #ddd;text-align:center">'+(ic?'✅':'❌')+'</td></tr>';g++})});
+qh+='</table></div>';
+emailjs.send(SERVICE_ID,TEMPLATE_ID,{to_email:TARGET_EMAIL,student_name:name,student_class:klass,exam_date:date,total_score:score,success_rate:rate,grade:badge,answers_table:qh})
+.then(()=>{status.textContent=currentLang==='ar'?'✅ تم الإرسال بنجاح!':'✅ Sent successfully!';status.style.color='#16a34a';btn.textContent=currentLang==='ar'?'✓ تم':'✓ Sent';alert(currentLang==='ar'?'تم إرسال النتيجة للمعلم بنجاح!':'Result sent to teacher successfully!')})
+.catch(err=>{status.textContent=currentLang==='ar'?'❌ فشل الإرسال':'❌ Failed';status.style.color='#dc2626';btn.disabled=false;btn.textContent=currentLang==='ar'?'📧 حاول مرة أخرى':'📧 Try Again'});}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=loadState();
+  if(saved&&saved.seed){currentSeed=saved.seed;currentLang=saved.lang||'ar';timeRemaining=saved.timeRemaining!==undefined?saved.timeRemaining:TOTAL_TIME;answersVisible=saved.answersVisible||false}else{currentSeed=Date.now()}
+  document.getElementById('btn-ar').classList.toggle('active',currentLang==='ar');
+  document.getElementById('btn-en').classList.toggle('active',currentLang==='en');
+  document.body.classList.toggle('en-mode',currentLang==='en');
+  document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-ar]').forEach(el=>{el.textContent=el.getAttribute('data-'+currentLang)});
+  document.querySelectorAll('[data-placeholder-ar]').forEach(el=>{el.placeholder=el.getAttribute('data-placeholder-'+currentLang)});
+  prepareShuffledExam();renderExam();
+  if(saved){if(saved.studentName)document.getElementById('studentName').value=saved.studentName;if(saved.studentClass)document.getElementById('studentClass').value=saved.studentClass;if(saved.examDate)document.getElementById('examDate').value=saved.examDate;if(saved.answers)restoreAnswers(saved.answers)}
+  setupAnswerListeners();setupInputListeners();
+  document.getElementById('method-holder').innerHTML=svgGraphs.fig_sohcahtoa;
+  startTimer();
+});
+window.addEventListener('beforeunload',()=>saveState(false));
+</script>
+</body>
+</html>
